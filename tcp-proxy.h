@@ -33,7 +33,5 @@ struct {
 	
 	struct sockaddr_in address;
 	socklen_t addrlen;
-	
-	int running;
 } server;
 

@@ -116,8 +116,6 @@ main(int argc, char *argv[])
 		return 1;
 	}
 	
-	printf("src: %s:%d, dst: %s, max_clients: %d\n", server.hostname, server.port, options.dst, options.max_clients);
-	
 	server.socket = socket(AF_INET, SOCK_STREAM, 0);
 	if(server.socket < 0) {
 		fprintf(stderr, "Error creating socket!\n");
@@ -151,9 +149,7 @@ main(int argc, char *argv[])
 	
 	listen(server.socket, options.backlog);
 	
-	server.running = 1;
-	
-	while(server.running) {
+	while(1) {
 		server.highest_fd = server.socket;
 		
 		FD_ZERO(&server.fds);
@@ -266,17 +262,5 @@ main(int argc, char *argv[])
 			}
 		}
 	}
-	
-	printf("finishing\n");
-	close(server.socket);
-	
-	for(i = 0; i < options.max_clients; i++) {
-		if(server.clients[i].socket != 0) {
-			close(server.clients[i].backend);
-			close(server.clients[i].socket);
-		}
-	}
-	
-	free(server.clients);
 }
 
